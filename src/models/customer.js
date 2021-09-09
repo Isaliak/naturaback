@@ -17,11 +17,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   customer.init({
-    Name: DataTypes.STRING,
+    name: DataTypes.STRING,
     lastName: DataTypes.STRING,
     email: DataTypes.STRING,
     ci_number: DataTypes.INTEGER,
-    fecha_nacimiento: DataTypes.DATE,
+    birth_date: DataTypes.DATE,
     phone: DataTypes.INTEGER,
     deleted: DataTypes.BOOLEAN,
     state: DataTypes.BOOLEAN

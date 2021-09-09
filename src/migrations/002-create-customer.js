@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      Name: {
+      name: {
         type: Sequelize.STRING
       },
       lastName: {
@@ -22,7 +22,7 @@ module.exports = {
         allowNull: false,
         unique: true
       },
-      fecha_nacimiento: {
+      birth_date: {
         type: Sequelize.DATE
       },
       phone: {
