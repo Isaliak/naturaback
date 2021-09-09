@@ -22,7 +22,7 @@ class Server {
     }
     listen() {
         this.app.listen(this.port, () => {
-            console.log(`Server runing in http://localhost:` + this.port);
+            console.log(`Server runing in http://localhost:${this.port}`);
         });
     }
 }
