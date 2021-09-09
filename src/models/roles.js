@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.hasMany(models.user, {
+        foreignKey: 'id'
+      });
     }
   };
   roles.init({
@@ -18,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     deleted: DataTypes.BOOLEAN,
     state: DataTypes.BOOLEAN
   }, {
+    freezeTableName: true,
     sequelize,
     modelName: 'roles',
   });

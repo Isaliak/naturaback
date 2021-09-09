@@ -11,12 +11,19 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+
+      this.belongsTo(models.customer, {
+        foreignKey: 'ci_number'
+      });
+      this.belongsTo(models.roles, {
+        foreignKey: 'id'
+      });
     }
   };
   user.init({
     username: DataTypes.STRING,
     password: DataTypes.STRING,
-    costumer_ci: DataTypes.INTEGER,
+    customer_id: DataTypes.INTEGER,
     rol_id: DataTypes.INTEGER,
     deleted: DataTypes.BOOLEAN,
     state: DataTypes.BOOLEAN

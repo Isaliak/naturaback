@@ -11,18 +11,22 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.hasMany(models.user, {
+        foreignKey: 'ci_number'
+      });
     }
   };
   customer.init({
     Name: DataTypes.STRING,
     lastName: DataTypes.STRING,
     email: DataTypes.STRING,
-    ci_number: DataTypes.NUMERIC,
+    ci_number: DataTypes.INTEGER,
     fecha_nacimiento: DataTypes.DATE,
-    phone: DataTypes.NUMERIC,
+    phone: DataTypes.INTEGER,
     deleted: DataTypes.BOOLEAN,
     state: DataTypes.BOOLEAN
   }, {
+    freezeTableName: true,
     sequelize,
     modelName: 'customer',
   });
