@@ -1,8 +1,6 @@
 const express = require('express')
 const cors = require("cors");
 
-
-
 class Server {
     constructor() {
         this.app = express()
@@ -13,7 +11,8 @@ class Server {
     }
 
     routes() {
-        this.app.use('/api', require('../routes/users.routes'))
+        this.app.use('/api', require('./src/routes/users.routes'))
+        this.app.use('/api/customer', require('./src/routes/customer.routes'))
     }
     middlewares() {
         this.app.use(cors());
@@ -26,6 +25,6 @@ class Server {
         });
     }
 }
-
+// new Server()
 
 module.exports = Server

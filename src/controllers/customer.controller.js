@@ -36,23 +36,23 @@ const customerCreate = async (req, res) => {
     }
 }
 const customerUpdate = async (req, res) => {
-    const { ci_number } = req.params
+    const { ci } = req.params
     const { name, lastName, email, ci_number, birth_date, phone, state = true } = req.body
     try {
         const resp = await customer.update(
             { name, lastName, email, ci_number, birth_date, phone, state },
-            { where: { ci_number: ci_number } })
+            { where: { ci_number: ci } })
         return (resp != null) ? res.status(201).json({ resp }) : erroMsg('fallo', 'no se actualizo ningun registro', 400)
     } catch (error) {
         return erroMsg(error, error.message)
     }
 }
 const customerDelete = async (req, res) => {
-    const { ci_number } = req.params
+    const { ci } = req.params
     try {
         const resp = await customer.update(
             { deleted: true },
-            { where: { ci_number: ci_number } })
+            { where: { ci_number: ci } })
         return (resp != null) ? res.status(201).json({ resp }) : erroMsg('fallo', 'no se actualizo ningun registro', 400)
     } catch (error) {
         return erroMsg(error, error.message)
