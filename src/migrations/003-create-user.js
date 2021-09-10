@@ -14,7 +14,7 @@ module.exports = {
       password: {
         type: Sequelize.STRING
       },
-      customer_id: {
+      ci_number: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {

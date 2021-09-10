@@ -12,9 +12,9 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
 
-      this.belongsTo(models.customer, {
-        foreignKey: 'ci_number'
-      });
+      // this.belongsTo(models.customer, {
+      //   foreignKey: 'ci_number'
+      // });
       this.belongsTo(models.roles, {
         foreignKey: 'id'
       });
@@ -23,11 +23,12 @@ module.exports = (sequelize, DataTypes) => {
   user.init({
     username: DataTypes.STRING,
     password: DataTypes.STRING,
-    customer_id: DataTypes.INTEGER,
+    ci_number: DataTypes.INTEGER,
     rol_id: DataTypes.INTEGER,
     deleted: DataTypes.BOOLEAN,
     state: DataTypes.BOOLEAN
   }, {
+    freezeTableName: true,
     sequelize,
     modelName: 'user',
   });

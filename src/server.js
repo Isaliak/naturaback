@@ -15,7 +15,8 @@ class Server {
     }
 
     routes() {
-        this.app.use('/api', require('./routes/users.routes'))
+        // /api/user/(create||update||delete)/:ci
+        this.app.use('/api/users', require('./routes/user.routes'))
         // /api/customer/(create||update||delete)/:ci
         this.app.use('/api/customer', require('./routes/customer.routes'))
     }

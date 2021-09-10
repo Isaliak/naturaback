@@ -14,9 +14,9 @@ const customerGet = async (req, res) => {
     }
 }
 const customerGetByCi = async (req, res) => {
-    const { ci_number } = req.params
+    const { id } = req.params
     try {
-        const resp = await customer.findAll({ where: { deleted: false, ci_number: ci_number } })
+        const resp = await customer.findAll({ where: { deleted: false, ci_number: id } })
         return (resp != null && resp.length != 0) ? res.status(200).json({ resp }) : res.status(201).json({ error: 'fallo al recuperar el registro revise los datos' })
     } catch (error) {
         msg = { 'error': error, 'msg': error.message }
