@@ -7,11 +7,10 @@ const {
     customerUpdate,
     customerDelete
 } = require('../controllers/customer.controller')
-
 router.get('/', customerGet)
 router.get('/:id', customerGetByCi)
 router.post('/create', customerCreate)
-router.put('/update', customerUpdate)
-router.put('/delete', customerDelete)
+router.put('/update/:id', customerUpdate)
+router.put('/delete/:id', customerDelete)
 
 module.exports = router

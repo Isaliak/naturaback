@@ -7,5 +7,10 @@ router.get('/users', (req, res) => {
         msg: 'get api'
     })
 })
+router.post('/crear', (req, res) => {
+
+    const body = req.body
+    res.json({ body, msg: 'esta en users' })
+})
 
 module.exports = router
