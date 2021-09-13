@@ -28,7 +28,7 @@ const customerCreate = async (req = request, res = response) => {
     const { name, lastName, email, ci_number, birth_date, phone } = req.body
     try {
         const resp = await customer.create(
-            { name, lastName, email, ci_number, birth_date, phone }
+            { name, lastName, email, ci_number, birth_date, phone, createdAt: new Date(), updatedAt: new Date() }
         )
         return (resp != null && resp.length != 0) ? res.status(201).json({ resp }) : res.status(201).json({ error: 'fallo al registrar el registro revise los datos' })
     } catch (error) {
@@ -42,7 +42,7 @@ const customerUpdate = async (req, res) => {
     const { name, lastName, email, ci_number, birth_date, phone, state = true } = req.body
     try {
         const resp = await customer.update(
-            { name, lastName, email, ci_number, birth_date, phone, state },
+            { name, lastName, email, ci_number, birth_date, phone, state, updatedAt: new Date() },
             { where: { ci_number: id } })
         return (resp != null && resp != 0) ? res.status(201).json({ resp }) : res.status(400).json({ error: 'fallo al actualizar el registro revise los datos' })
     } catch (error) {
@@ -55,7 +55,7 @@ const customerDelete = async (req, res) => {
     const { id } = req.params
     try {
         const resp = await customer.update(
-            { deleted: true },
+            { deleted: true, updatedAt: new Date() },
             { where: { ci_number: id } })
         return (resp != null && resp != 0) ? res.status(201).json({ resp }) : res.status(400).json({ error: 'fallo al eliminar el registro revise los datos' })
     } catch (error) {

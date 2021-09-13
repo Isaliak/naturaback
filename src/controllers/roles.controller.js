@@ -1,14 +1,12 @@
 const { request, response } = require('express')
-const user = require('../models').user
+const roles = require('../models').roles
 
 
 let msg = {}
-const userGet = async (req, res) => {
-    console.log(user);
+const rolesGet = async (req, res) => {
+    console.log(roles);
     try {
-        const resp = await user.findAll({ //attributes: { exclude: ['ci_number'] }, 
-            where: { deleted: false }
-        })
+        const resp = await roles.findAll({ where: { deleted: false } })
         return (resp != null && resp.length != 0) ? res.status(200).json(resp) : res.status(201).json({ error: 'fallo al recuperar los registros revise los datos' })
     } catch (error) {
         msg = { 'error': error, 'msg': error.message }
@@ -16,10 +14,10 @@ const userGet = async (req, res) => {
         return res.status(500).json({ msg })
     }
 }
-const userGetById = async (req, res) => {
+const rolesGetById = async (req, res) => {
     const { id } = req.params
     try {
-        const resp = await user.findAll({ where: { deleted: false, id: id } })
+        const resp = await roles.findAll({ where: { deleted: false, id: id } })
         return (resp != null && resp.length != 0) ? res.status(200).json(resp) : res.status(201).json({ error: 'fallo al recuperar el registro revise los datos' })
     } catch (error) {
         msg = { 'error': error, 'msg': error.message }
@@ -27,11 +25,11 @@ const userGetById = async (req, res) => {
         return res.status(500).json({ msg })
     }
 }
-const userCreate = async (req = request, res = response) => {
-    const { ci_number, username, password, rol_id } = req.body
+const rolesCreate = async (req = request, res = response) => {
+    const { rolename } = req.body
     try {
-        const resp = await user.create(
-            { ci_number, username, password, rol_id, createdAt: new Date(), updatedAt: new Date() }
+        const resp = await roles.create(
+            { rolename, createdAt: new Date(), updatedAt: new Date() }
         )
         return (resp != null && resp.length != 0) ? res.status(201).json(resp) : res.status(201).json({ error: 'fallo al registrar el registro revise los datos' })
     } catch (error) {
@@ -40,12 +38,12 @@ const userCreate = async (req = request, res = response) => {
         return res.status(500).json({ msg })
     }
 }
-const userUpdate = async (req, res) => {
+const rolesUpdate = async (req, res) => {
     const { id } = req.params
-    const { ci_number, username, password, state, rol_id } = req.body
+    const { rolename } = req.body
     try {
-        const resp = await user.update(
-            { ci_number, username, password, state, rol_id, updatedAt: new Date() },
+        const resp = await roles.update(
+            { rolename, updatedAt: new Date() },
             { where: { id: id } })
         return (resp != null && resp != 0) ? res.status(201).json(resp) : res.status(400).json({ error: 'fallo al actualizar el registro revise los datos' })
     } catch (error) {
@@ -54,10 +52,10 @@ const userUpdate = async (req, res) => {
         return res.status(500).json({ msg })
     }
 }
-const userDelete = async (req, res) => {
+const rolesDelete = async (req, res) => {
     const { id } = req.params
     try {
-        const resp = await user.update(
+        const resp = await roles.update(
             { deleted: true, updatedAt: new Date() },
             { where: { id: id } })
         return (resp != null && resp != 0) ? res.status(201).json(resp) : res.status(400).json({ error: 'fallo al eliminar el registro revise los datos' })
@@ -68,9 +66,9 @@ const userDelete = async (req, res) => {
     }
 }
 module.exports = {
-    userGet,
-    userGetById,
-    userCreate,
-    userUpdate,
-    userDelete
+    rolesGet,
+    rolesGetById,
+    rolesCreate,
+    rolesUpdate,
+    rolesDelete
 }

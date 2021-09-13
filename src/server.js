@@ -19,6 +19,8 @@ class Server {
         this.app.use('/api/users', require('./routes/user.routes'))
         // /api/customer/(create||update||delete)/:ci
         this.app.use('/api/customer', require('./routes/customer.routes'))
+        // /api/customer/(create||update||delete)/:ci
+        this.app.use('/api/roles', require('./routes/roles.routes'))
     }
     middlewares() {
         this.app.use(cors());
