@@ -19,8 +19,14 @@ class Server {
         this.app.use('/api/users', require('./routes/user.routes'))
         // /api/customer/(create||update||delete)/:ci
         this.app.use('/api/customer', require('./routes/customer.routes'))
-        // /api/customer/(create||update||delete)/:ci
+        // /api/roles/(create||update||delete)/:ci
         this.app.use('/api/roles', require('./routes/roles.routes'))
+        // /api/company/(create||update||delete)/:ci
+        this.app.use('/api/company', require('./routes/company.routes'))
+        // /api/goal_map/(create||update||delete)/:ci
+        this.app.use('/api/goal_map', require('./routes/goal_map.routes'))
+        // /api/transactions/(create||update||delete)/:ci
+        this.app.use('/api/transactions', require('./routes/transactions.routes'))
     }
     middlewares() {
         this.app.use(cors());
