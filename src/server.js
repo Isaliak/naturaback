@@ -2,8 +2,6 @@ const express = require('express')
 const cors = require("cors");
 const { Router } = require('express');
 
-
-
 class Server {
     constructor() {
         this.app = express()
@@ -13,7 +11,6 @@ class Server {
         this.routes()
         this.listen()
     }
-
     routes() {
         // /api/user/(create||update||delete)/:ci
         this.app.use('/api/users', require('./routes/user.routes'))
@@ -27,6 +24,12 @@ class Server {
         this.app.use('/api/goal_map', require('./routes/goal_map.routes'))
         // /api/transactions/(create||update||delete)/:ci
         this.app.use('/api/transactions', require('./routes/transactions.routes'))
+        // /api/bottle/(create||update||delete)/:ci
+        this.app.use('/api/bottle', require('./routes/bottle.routes'))
+        // /api/transaction_type/(create||update||delete)/:ci
+        this.app.use('/api/transaction_type', require('./routes/transaction_type.routes'))
+        // /api/transaction_calculator/(acumulacion||redencion)/:ci
+        this.app.use('/api/transaction_calculator', require('./routes/transaction_calculator.routes'))
     }
     middlewares() {
         this.app.use(cors());
@@ -34,7 +37,6 @@ class Server {
         this.app.use(express.json())
         this.app.use(express.raw())
         // this.app.use('/src', express.static('./src'))
-
     }
     listen() {
         this.app.listen(this.port, () => {
@@ -42,6 +44,5 @@ class Server {
         });
     }
 }
-// new Server()
 
 module.exports = Server

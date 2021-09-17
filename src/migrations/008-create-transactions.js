@@ -46,6 +46,20 @@ module.exports = {
       picture: {
         type: Sequelize.STRING
       },
+      bottle_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'bottle_type',
+          key: 'id'
+        }
+      },
+      transaction_type: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'transaction_type',
+          key: 'id'
+        }
+      },
       deleted: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
