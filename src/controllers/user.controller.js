@@ -32,14 +32,14 @@ const userGetById = async (req, res) => {
 const userCreate = async (req = request, res = response) => {
     const { customer_id, username, password, rol_id } = req.body
     try {
+        const respCustomer = await customer.findOne({ where: { id: customer_id } })
         if (respCustomer != null) {
-            const respCustomer = await customer.findOne({ where: { id: customer_id } })
             const resp = await user.create(
                 { username, password, customer_id, rol_id, createdAt: new Date(), updatedAt: new Date() }
             )
             const respTransact = await transactions.create(
                 {
-                    customer_id: respCustomer.id,
+                    customer_id: parseInt(respCustomer.id),
                     company_id: null,
                     date: new Date(),
                     detail: 'Transaccion de mantenimiento',

@@ -1,5 +1,7 @@
+
 const { request, response } = require('express')
 const transactions = require('../models').transactions
+
 
 
 let msg = {}
@@ -25,10 +27,11 @@ const transactionsGetById = async (req, res) => {
     }
 }
 const transactionsCreate = async (req = request, res = response) => {
-    const { customer_id, comapny_id, date, detail, type, pin, origin, ip, amount, picture } = req.body
+    const { customer_id, comapny_id, detail, type, pin, origin, ip, amount, picture } = req.body
     try {
+
         const resp = await transactions.create(
-            { customer_id, comapny_id, date, detail, type, pin, origin, ip, amount, picture, createdAt: new Date(), updatedAt: new Date() }
+            { customer_id, comapny_id, date: new Date(), detail, type, pin, origin, ip, amount, picture, createdAt: new Date(), updatedAt: new Date() }
         )
         return (resp != null && resp.length != 0) ? res.status(201).json(resp) : res.status(201).json({ error: 'fallo al registrar el registro revise los datos' })
     } catch (error) {

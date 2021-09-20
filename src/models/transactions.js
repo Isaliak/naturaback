@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsTo(models.customer, {
+        foreignKey: 'id'
+      });
     }
   };
   transactions.init({
@@ -18,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     company_id: DataTypes.INTEGER,
     date: DataTypes.DATE,
     detail: DataTypes.STRING,
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
     pin: DataTypes.INTEGER,
     origin: DataTypes.STRING,
     ip: DataTypes.STRING,
