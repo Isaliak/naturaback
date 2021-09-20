@@ -30,23 +30,12 @@ const userGetById = async (req, res) => {
     }
 }
 const userCreate = async (req = request, res = response) => {
-    const { ci_number, username, password, rol_id } = req.body
-    const transact = {}
-    let {
-        customer_id,
-        company_id,
-        date,
-        detail,
-        amount,
-        type,
-        origin,
-        ip
-    } = transact
+    const { customer_id, username, password, rol_id } = req.body
     try {
-        const respCustomer = await customer.findOne({ where: { ci_number: ci_number } })
         if (respCustomer != null) {
+            const respCustomer = await customer.findOne({ where: { id: customer_id } })
             const resp = await user.create(
-                { ci_number, username, password, rol_id, createdAt: new Date(), updatedAt: new Date() }
+                { username, password, customer_id, rol_id, createdAt: new Date(), updatedAt: new Date() }
             )
             const respTransact = await transactions.create(
                 {
@@ -64,7 +53,6 @@ const userCreate = async (req = request, res = response) => {
             return (resp != null && resp.length != 0 && respTransact != null && respTransact.length != 0)
                 ? res.status(201).json({ "Usuario": resp, "Transaccion": respTransact })
                 : res.status(400).json({ error: 'fallo al registrar el registro revise los datos' })
-
         }
         else {
             return res.status(400).json({ error: 'fallo al realizar el registro revise los datos' })

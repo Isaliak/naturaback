@@ -12,10 +12,10 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.hasMany(models.user, {
-        foreignKey: 'ci_number'
+        foreignKey: 'id'
       });
       this.hasMany(models.transactions, {
-        foreignKey: 'ci_number'
+        foreignKey: 'id'
       });
     }
   };

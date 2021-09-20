@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
   user.init({
     username: DataTypes.STRING,
     password: DataTypes.STRING,
-    ci_number: DataTypes.INTEGER,
+    customer_id: DataTypes.INTEGER,
     rol_id: DataTypes.INTEGER,
     deleted: DataTypes.BOOLEAN,
     state: DataTypes.BOOLEAN

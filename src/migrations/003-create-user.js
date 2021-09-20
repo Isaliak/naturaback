@@ -14,12 +14,12 @@ module.exports = {
       password: {
         type: Sequelize.STRING
       },
-      ci_number: {
+      customer_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: 'customer',
-          key: 'ci_number'
+          key: 'id'
         }
       },
       rol_id: {
