@@ -29,11 +29,27 @@ const transactionsGetById = async (req, res) => {
 const transactionsCreate = async (req = request, res = response) => {
     const { customer_id, comapny_id, detail, type, pin, origin, ip, amount, picture } = req.body
     try {
-
-        const resp = await transactions.create(
-            { customer_id, comapny_id, date: new Date(), detail, type, pin, origin, ip, amount, picture, createdAt: new Date(), updatedAt: new Date() }
-        )
-        return (resp != null && resp.length != 0) ? res.status(201).json(resp) : res.status(201).json({ error: 'fallo al registrar el registro revise los datos' })
+        const resp_transact = await transactions.findAll({
+            where: { customer_id: customer_id },
+        })
+        let resp_amount = 0
+        //valida qe existan transacciones
+        if (Array.isArray(resp_transact) && resp_transact.length !== 0) {
+            //suma todas las transacciones de tipo acumulacion y resta las demas al monto
+            resp_transact.forEach(transact => {
+                return transact.type == 1
+                    ? resp_amount = resp_amount + transact.amount
+                    : resp_amount = resp_amount - transact.amount
+            })
+        }
+        if (type == 2 && resp_amount < amount) {
+            return res.status(400).json({ respuesta: 'El cliente selecionado no tiene fondos suficientes' })
+        } else {
+            const resp = await transactions.create(
+                { customer_id, comapny_id, date: new Date(), detail, type, pin, origin, ip, amount, picture, createdAt: new Date(), updatedAt: new Date() }
+            )
+            return (resp != null && resp.length != 0) ? res.status(201).json(resp) : res.status(201).json({ error: 'fallo al registrar el registro revise los datos' })
+        }
     } catch (error) {
         msg = { 'error': error, 'msg': error.message }
         console.log(msg);

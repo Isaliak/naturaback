@@ -2,6 +2,7 @@ const transactions = require('../models').transactions
 
 
 const transaction_calculator = {}
+
 transaction_calculator.acumulacion = async (req, res) => {
     const { id } = req.params
     try {
@@ -9,30 +10,36 @@ transaction_calculator.acumulacion = async (req, res) => {
         const resp = await transactions.findAll({
             where: { customer_id: id },
         })
-        let amount = 0
+        let acumulado = 0
+        let redimido = 0
+        let mantenimiento = 0
         //valida qe existan transacciones
         if (Array.isArray(resp) && resp.length !== 0) {
             //suma todas las transacciones de tipo acumulacion y resta las demas al monto
             resp.forEach(transact => {
-                return transact.type == 1 ? amount = amount + transact.amount : amount = amount - transact.amount
+                transact.type == 1
+                    ? acumulado = acumulado + transact.amount
+                    : acumulado = acumulado - transact.amount
+                transact.type == 2
+                    ? redimido = redimido + parseInt(transact.amount)
+                    : redimido = redimido
+                transact.type == 3
+                    ? mantenimiento = mantenimiento + parseInt(transact.amount)
+                    : mantenimiento = mantenimiento
             })
             //valida que el monto no sea cero ni negativo para enviar la respuesta
-            amount != 0 && amount > 0
-                ? res.status(200).json({ respuesta: 'Total acumulado', amount })
-                : res.status(400).json({ respuesta: 'No tiene monto acumulado' })
+            return acumulado != 0 && acumulado > 0
+                ? res.status(200).json({ respuesta: 'Total acumulado', acumulado, redimido, mantenimiento })
+                : res.status(400).json({ respuesta: 'No tiene monto acumulado', redimido, mantenimiento })
         } else {
-            res.status(400).json({ respuesta: 'El usuario no tiene transacciones registradas' })
+            return res.status(400).json({ respuesta: 'El usuario no tiene transacciones registradas' })
         }
     } catch (error) {
         console.log(error);
-        res.status(400).json({ erro: error, message: error.message })
+        return res.status(400).json({ erro: error, message: error.message })
     }
-
-
 }
-transaction_calculator.redencion = (req, resp) => {
 
-}
 
 
 module.exports = transaction_calculator
