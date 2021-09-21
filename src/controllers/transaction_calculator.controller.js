@@ -5,6 +5,7 @@ const transaction_calculator = {}
 transaction_calculator.acumulacion = async (req, res) => {
     const { id } = req.params
     try {
+        //consulta el total acumulado del cliente
         const { acumulado, redimido, mantenimiento, respuesta } = await calculadora(id)
         console.log(respuesta, 'es respuesta')
         if (respuesta == 0) {
