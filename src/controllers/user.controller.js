@@ -1,4 +1,6 @@
 const { request, response } = require('express')
+const bcrypt = require('bcryptjs')
+
 const user = require('../models').user
 const transactions = require('../models').transactions
 const customer = require('../models').customer
@@ -31,11 +33,12 @@ const userGetById = async (req, res) => {
 }
 const userCreate = async (req = request, res = response) => {
     const { customer_id, username, password, rol_id } = req.body
+    const salt = bcrypt.genSaltSync(10)
     try {
         const respCustomer = await customer.findOne({ where: { id: customer_id } })
         if (respCustomer != null) {
             const resp = await user.create(
-                { username, password, customer_id, rol_id, createdAt: new Date(), updatedAt: new Date() }
+                { username, password: bcrypt.hashSync(password, salt), customer_id, rol_id, createdAt: new Date(), updatedAt: new Date() }
             )
             const respTransact = await transactions.create(
                 {
