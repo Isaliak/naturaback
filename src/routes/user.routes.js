@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const { check } = require('express-validator');
 
 const routerUser = Router()
 const {
@@ -11,7 +12,12 @@ const {
 
 routerUser.get('/', userGet)
 routerUser.get('/:id', userGetById)
-routerUser.post('/create', userCreate)
+routerUser.post('/create',
+    check('username', 'el nombre de usuario no puede estar vacio').notEmpty(),
+    check('password', 'debe tener 6 caracteres como minimo').isLength({ min: 6 })
+        .matches('^[0-9a-zA-Z ]+$'),
+    userCreate
+)
 routerUser.put('/update/:id', userUpdate)
 routerUser.put('/delete/:id', userDelete)
 

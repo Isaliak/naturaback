@@ -30,8 +30,8 @@ const transactionsGetById = async (req, res) => {
 const transactionsCreate = async (req = request, res = response) => {
     const { customer_id, comapny_id, detail, type, pin, origin, ip, amount, picture } = req.body
     try {
+        //consulta el total acumulado del cliente
         const { acumulado, respuesta } = await calculadora(customer_id)
-
         if (type == 2 && acumulado < amount && respuesta == 0) {
             return res.status(400).json({ respuesta: 'El cliente selecionado no tiene fondos suficientes' })
         } else {
