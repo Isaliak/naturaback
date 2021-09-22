@@ -1,6 +1,5 @@
 const { request, response } = require('express')
 const bcrypt = require('bcryptjs')
-const { validationResult } = require('express-validator');
 const user = require('../models').user
 const transactions = require('../models').transactions
 const customer = require('../models').customer
@@ -32,12 +31,12 @@ const userGetById = async (req, res) => {
     }
 }
 const userCreate = async (req = request, res = response) => {
-
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
     const { customer_id, username, password, rol_id } = req.body
+
+    const userExist = await user.findOne({ where: { username } })
+    if (userExist !== null) {
+        return res.status(400).json({ respuesta: 'el nombre de usuario ya esta en uso' })
+    }
     const salt = bcrypt.genSaltSync(10)
     try {
         const respCustomer = await customer.findOne({ where: { id: customer_id } })

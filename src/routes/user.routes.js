@@ -1,6 +1,8 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 
+const { validations } = require('../helpers/validations')
+
 const routerUser = Router()
 const {
     userGet,
@@ -12,12 +14,14 @@ const {
 
 routerUser.get('/', userGet)
 routerUser.get('/:id', userGetById)
-routerUser.post('/create',
+routerUser.post('/create', [
     check('username', 'el nombre de usuario no puede estar vacio').notEmpty(),
-    check('cutomer_id', 'el id de customer no puede estar vacio').notEmpty(),
+    check('customer_id', 'el id de customer no puede estar vacio').notEmpty(),
     check('rol_id', 'el id de rol no puede estar vacio').notEmpty(),
-    check('password', 'debe tener 6 caracteres como minimo').isLength({ min: 6 })
-        .matches('^[0-9a-zA-Z ]+$'),
+    check('password', 'debe tener 6 caracteres como minimo').isLength({ min: 6 }),
+    check('password', 'debe tener numeros, mayusculas y caracteres especiales').isStrongPassword(),
+    validations,
+],
     userCreate
 )
 routerUser.put('/update/:id', userUpdate)
