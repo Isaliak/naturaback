@@ -37,7 +37,7 @@ class Server {
         this.app.use(express.urlencoded({ extended: false }));
         this.app.use(express.json())
         this.app.use(express.raw())
-        // this.app.use('/src', express.static('./src'))
+        this.app.use(express.static('../src'))
     }
     listen() {
         this.app.listen(this.port, () => {

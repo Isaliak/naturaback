@@ -28,7 +28,9 @@ const transactionsGetById = async (req, res) => {
     }
 }
 const transactionsCreate = async (req = request, res = response) => {
-    const { customer_id, comapny_id, detail, type, pin, origin, ip, amount, picture } = req.body
+    let ip = req.header('x-forwarded-for') || req.socket.remoteAddress;
+    console.log(ip, 'ip cliente');
+    const { customer_id, comapny_id, detail, type, pin, origin, amount, picture } = req.body
     try {
         //consulta el total acumulado del cliente
         const { acumulado, respuesta } = await calculadora(customer_id)

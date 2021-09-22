@@ -7,8 +7,9 @@ const customer = require('../models').customer
 const salt = bcrypt.genSaltSync(10)
 let msg = {}
 const userGet = async (req, res) => {
-    console.log(user);
+    // let ip = req.header('x-forwarded-for') || req.socket.remoteAddress;
     try {
+        // console.log(ip, 'ip cliente');
         const resp = await user.findAll({ //attributes: { exclude: ['ci_number'] }, 
             where: { deleted: false }
         })
@@ -32,33 +33,41 @@ const userGetById = async (req, res) => {
 }
 const userCreate = async (req = request, res = response) => {
     const { customer_id, username, password, rol_id } = req.body
-
+    let ip = req.header('x-forwarded-for') || req.socket.remoteAddress;
+    console.log(ip, 'ip cliente');
     try {
         const userExist = await user.findOne({ where: { username } })
-        if (userExist !== null) {
-            return res.status(400).json({ respuesta: 'el nombre de usuario ya esta en uso' })
-        }
+        const userExistCustomerId = await user.findOne({ where: { customer_id } })
         const respCustomer = await customer.findOne({ where: { id: customer_id } })
         if (respCustomer != null) {
-            const resp = await user.create(
-                { username, password: bcrypt.hashSync(password, salt), customer_id, rol_id, createdAt: new Date(), updatedAt: new Date() }
-            )
-            const respTransact = await transactions.create(
-                {
-                    customer_id: parseInt(respCustomer.id),
-                    company_id: null,
-                    date: new Date(),
-                    detail: 'Transaccion de mantenimiento',
-                    amount: 4,
-                    type: 3,
-                    origin: 'no se sabe aun',
-                    ip: 'no se sabe aun',
-                    createdAt: new Date(), updatedAt: new Date()
+            if (userExistCustomerId == null) {
+                if (userExist !== null) {
+                    return res.status(400).json({ respuesta: 'el nombre de usuario ya esta en uso' })
                 }
-            )
-            return (resp != null && resp.length != 0 && respTransact != null && respTransact.length != 0)
-                ? res.status(201).json({ "Usuario": resp, "Transaccion": respTransact })
-                : res.status(400).json({ error: 'fallo al registrar el registro revise los datos' })
+                const resp = await user.create(
+                    { username, password: bcrypt.hashSync(password, salt), customer_id, rol_id, createdAt: new Date(), updatedAt: new Date() }
+                )
+                const respTransact = await transactions.create(
+                    {
+                        customer_id: parseInt(respCustomer.id),
+                        company_id: null,
+                        date: new Date(),
+                        detail: 'Transaccion de mantenimiento',
+                        amount: 4,
+                        type: 3,
+                        origin: 'no se sabe aun',
+                        ip,
+                        createdAt: new Date(), updatedAt: new Date()
+                    }
+                )
+                return (resp != null && resp.length != 0 && respTransact != null && respTransact.length != 0)
+                    ? res.status(201).json({ "Usuario": resp, "Transaccion": respTransact })
+                    : res.status(400).json({ error: 'fallo al registrar el registro revise los datos' })
+            }
+            else {
+                return res.status(400).json({ error: 'el cliente ya tiene un usuario registrado' })
+
+            }
         }
         else {
             return res.status(400).json({ error: 'fallo al realizar el registro revise los datos' })
