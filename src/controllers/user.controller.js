@@ -4,7 +4,7 @@ const user = require('../models').user
 const transactions = require('../models').transactions
 const customer = require('../models').customer
 
-
+const salt = bcrypt.genSaltSync(10)
 let msg = {}
 const userGet = async (req, res) => {
     console.log(user);
@@ -33,12 +33,11 @@ const userGetById = async (req, res) => {
 const userCreate = async (req = request, res = response) => {
     const { customer_id, username, password, rol_id } = req.body
 
-    const userExist = await user.findOne({ where: { username } })
-    if (userExist !== null) {
-        return res.status(400).json({ respuesta: 'el nombre de usuario ya esta en uso' })
-    }
-    const salt = bcrypt.genSaltSync(10)
     try {
+        const userExist = await user.findOne({ where: { username } })
+        if (userExist !== null) {
+            return res.status(400).json({ respuesta: 'el nombre de usuario ya esta en uso' })
+        }
         const respCustomer = await customer.findOne({ where: { id: customer_id } })
         if (respCustomer != null) {
             const resp = await user.create(
@@ -72,12 +71,26 @@ const userCreate = async (req = request, res = response) => {
 }
 const userUpdate = async (req, res) => {
     const { id } = req.params
-    const { ci_number, username, password, state, rol_id } = req.body
+    const { ci_number, username, password, new_password, state, rol_id } = req.body
+    const validate_password = await user.findOne({ where: { id } })
+    let pass_compare = false
     try {
-        const resp = await user.update(
-            { ci_number, username, password, state, rol_id, updatedAt: new Date() },
-            { where: { id: id } })
-        return (resp != null && resp != 0) ? res.status(201).json(resp) : res.status(400).json({ error: 'fallo al actualizar el registro revise los datos' })
+        validate_password != null ? pass_compare = bcrypt.compareSync(password, validate_password.password) : pass_compare
+        if (pass_compare) {
+            if (new_password != password) {
+                console.log({ new_password });
+                const resp = await user.update(
+                    { ci_number, username, password: bcrypt.hashSync(new_password, salt), state, rol_id, updatedAt: new Date() },
+                    { where: { id: id } })
+                return (resp != null && resp != 0) ? res.status(201).json(resp) : res.status(400).json({ error: 'fallo al actualizar el registro revise los datos' })
+            }
+            else {
+                return res.status(201).json({ respuesta: 'La nueva contraseña no puede ser igual que la anterior' })
+            }
+        }
+        else {
+            return res.status(400).json({ respuesta: 'La contraseña o el id usuario esta incorrecto ' })
+        }
     } catch (error) {
         msg = { 'error': error, 'msg': error.message }
         console.log(msg);
