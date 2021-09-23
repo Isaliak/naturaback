@@ -27,6 +27,10 @@ const customerGetByCi = async (req, res) => {
 const customerCreate = async (req = request, res = response) => {
     const { name, lastName, email, ci_number, birth_date, phone } = req.body
     try {
+        const emailExist = customer.finOne({ where: { email } })
+        if (emailExist) {
+            return res.status(400).json({ respuesta: 'el email ya esta en uso' })
+        }
         const resp = await customer.create(
             { name, lastName, email, ci_number, birth_date, phone, createdAt: new Date(), updatedAt: new Date() }
         )

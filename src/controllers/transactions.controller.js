@@ -1,4 +1,3 @@
-
 const { request, response } = require('express')
 const transactions = require('../models').transactions
 const { calculadora } = require('../helpers/calculator')
@@ -7,6 +6,7 @@ const { calculadora } = require('../helpers/calculator')
 
 let msg = {}
 const transactionsGet = async (req, res) => {
+
     try {
         const resp = await transactions.findAll({ where: { deleted: false } })
         return (resp != null && resp.length != 0) ? res.status(200).json(resp) : res.status(201).json({ error: 'No hay registros para mostrar' })
@@ -49,8 +49,9 @@ const transactionsCreate = async (req = request, res = response) => {
     }
 }
 const transactionsUpdate = async (req, res) => {
+    let ip = req.header('x-forwarded-for') || req.socket.remoteAddress;
     const { id } = req.params
-    const { customer_id, comapny_id, date, detail, type, pin, origin, ip, amount, picture, state } = req.body
+    const { customer_id, comapny_id, date, detail, type, pin, origin, amount, picture, state } = req.body
     try {
         const resp = await transactions.update(
             { customer_id, comapny_id, date, detail, type, pin, origin, ip, amount, picture, state, updatedAt: new Date() },

@@ -32,7 +32,7 @@ const userGetById = async (req, res) => {
     }
 }
 const userCreate = async (req = request, res = response) => {
-    const { customer_id, username, password, rol_id } = req.body
+    const { customer_id, username, password, rol_id, origin } = req.body
     let ip = req.header('x-forwarded-for') || req.socket.remoteAddress;
     console.log(ip, 'ip cliente');
     try {
@@ -55,7 +55,7 @@ const userCreate = async (req = request, res = response) => {
                         detail: 'Transaccion de mantenimiento',
                         amount: 4,
                         type: 3,
-                        origin: 'no se sabe aun',
+                        origin,
                         ip,
                         createdAt: new Date(), updatedAt: new Date()
                     }
