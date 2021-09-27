@@ -1,6 +1,7 @@
 const { request, response } = require('express')
 const transactions = require('../models').transactions
 const { calculadora } = require('../helpers/calculator')
+const { getIp } = require('../helpers/getIp')
 
 
 
@@ -28,7 +29,7 @@ const transactionsGetById = async (req, res) => {
     }
 }
 const transactionsCreate = async (req = request, res = response) => {
-    let ip = req.header('x-forwarded-for') || req.socket.remoteAddress;
+    let ip = getIp();
     console.log(ip, 'ip cliente');
     const { customer_id, comapny_id, detail, type, pin, origin, amount, picture } = req.body
     try {
@@ -40,7 +41,7 @@ const transactionsCreate = async (req = request, res = response) => {
             const resp = await transactions.create(
                 { customer_id, comapny_id, date: new Date(), detail, type, pin, origin, ip, amount, picture, createdAt: new Date(), updatedAt: new Date() }
             )
-            return (resp != null && resp.length != 0) ? res.status(201).json(resp) : res.status(201).json({ error: 'fallo al registrar el registro revise los datos' })
+            return (resp != null && resp.length != 0) ? res.status(201).json(resp) : res.status(201).json({ error: 'fallo al realizar el registro revise los datos' })
         }
     } catch (error) {
         msg = { 'error': error, 'msg': error.message }
@@ -49,7 +50,7 @@ const transactionsCreate = async (req = request, res = response) => {
     }
 }
 const transactionsUpdate = async (req, res) => {
-    let ip = req.header('x-forwarded-for') || req.socket.remoteAddress;
+    let ip = getIp();
     const { id } = req.params
     const { customer_id, comapny_id, date, detail, type, pin, origin, amount, picture, state } = req.body
     try {

@@ -31,7 +31,7 @@ const rolesCreate = async (req = request, res = response) => {
         const resp = await roles.create(
             { rolename, createdAt: new Date(), updatedAt: new Date() }
         )
-        return (resp != null && resp.length != 0) ? res.status(201).json(resp) : res.status(201).json({ error: 'fallo al registrar el registro revise los datos' })
+        return (resp != null && resp.length != 0) ? res.status(201).json(resp) : res.status(201).json({ error: 'fallo al realizar el registro revise los datos' })
     } catch (error) {
         msg = { 'error': error, 'msg': error.message }
         console.log(msg);

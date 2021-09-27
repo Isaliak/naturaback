@@ -30,7 +30,7 @@ const goal_mapCreate = async (req = request, res = response) => {
         const resp = await goal_map.create(
             { name, description, gift, goal, createdAt: new Date(), updatedAt: new Date() }
         )
-        return (resp != null && resp.length != 0) ? res.status(201).json(resp) : res.status(201).json({ error: 'fallo al registrar el registro revise los datos' })
+        return (resp != null && resp.length != 0) ? res.status(201).json(resp) : res.status(201).json({ error: 'fallo al realizar el registro revise los datos' })
     } catch (error) {
         msg = { 'error': error, 'msg': error.message }
         console.log(msg);
