@@ -1,16 +1,12 @@
 const { Router } = require('express')
 const router = Router()
 const {
-    bottleGet,
-    bottleGetById,
-    bottleCreate,
-    bottleUpdate,
-    bottleDelete
+    controllers
 } = require('../controllers/bottle.controller')
-router.get('/', bottleGet)
-router.get('/:id', bottleGetById)
-router.post('/create', bottleCreate)
-router.put('/update/:id', bottleUpdate)
-router.put('/delete/:id', bottleDelete)
+router.get('/', controllers.get)
+router.get('/:id', controllers.getById)
+router.post('/create', controllers.create)
+router.put('/update/:id', controllers.update)
+router.put('/delete/:id', controllers.delete)
 
 module.exports = router

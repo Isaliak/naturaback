@@ -1,18 +1,22 @@
 const log = require('../models').log
 const { getIp } = require('./getIp')
 
-const logCreate = async (type, call, functionName, message, cod_resp, parameters, req) => {
-    let msg = {}
+const logCreate = async (call, functionName, cod_resp, parameters, req) => {
     try {
-        await log.create(
-            { type, call, functionName, message, cod_resp, parameters, ip: getIp(req), createdAt: new Date(), updatedAt: new Date() }
-        )
-        /// codigo de respuesta para los controladores
 
-    } catch (error) {
-        // msg = { 'error': error, 'msg': error.message }
-        console.log(error);
-    }
+        await log.create(
+            {
+                type: cod_resp == 400 ? 'error' : cod_resp == 500 ? 'faltalError' : 'successful',
+                call,
+                functionName,
+                message: cod_resp == 400 ? 'failed' : cod_resp == 500 ? JSON.stringify(parameters.message) : 'success',
+                cod_resp,
+                parameters: JSON.stringify(parameters),
+                ip: getIp(req),
+                createdAt: new Date(), updatedAt: new Date()
+            }
+        )
+    } catch (error) { return console.log(error); }
 }
 
 

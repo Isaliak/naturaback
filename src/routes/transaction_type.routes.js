@@ -1,16 +1,12 @@
 const { Router } = require('express')
 const router = Router()
 const {
-    transaction_typeGet,
-    transaction_typeGetById,
-    transaction_typeCreate,
-    transaction_typeUpdate,
-    transaction_typeDelete
-} = require('../controllers/transactio_type.controller')
-router.get('/', transaction_typeGet)
-router.get('/:id', transaction_typeGetById)
-router.post('/create', transaction_typeCreate)
-router.put('/update/:id', transaction_typeUpdate)
-router.put('/delete/:id', transaction_typeDelete)
+    controllers
+} = require('../controllers/transaction_type.controller')
+router.get('/', controllers.get)
+router.get('/:id', controllers.getById)
+router.post('/create', controllers.create)
+router.put('/update/:id', controllers.update)
+router.put('/delete/:id', controllers.delete)
 
 module.exports = router

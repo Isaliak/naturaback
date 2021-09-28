@@ -1,9 +1,7 @@
-const { request, response } = require('express')
 const transaction_type = require('../models').transaction_type
 
-
-let msg = {}
-const transaction_typeGet = async (req, res) => {
+const controllers = {}
+controllers.get = async (req, res) => {
     console.log(transaction_type);
     try {
         const resp = await transaction_type.findAll({ where: { deleted: false } })
@@ -14,7 +12,7 @@ const transaction_typeGet = async (req, res) => {
         return res.status(500).json({ msg })
     }
 }
-const transaction_typeGetById = async (req, res) => {
+controllers.getById = async (req, res) => {
     const { id } = req.params
     try {
         const resp = await transaction_type.findAll({ where: { deleted: false, id: id } })
@@ -25,7 +23,7 @@ const transaction_typeGetById = async (req, res) => {
         return res.status(500).json({ msg })
     }
 }
-const transaction_typeCreate = async (req = request, res = response) => {
+controllers.create = async (req, res) => {
     const { name } = req.body
     try {
         const resp = await transaction_type.create(
@@ -38,7 +36,7 @@ const transaction_typeCreate = async (req = request, res = response) => {
         return res.status(500).json({ msg })
     }
 }
-const transaction_typeUpdate = async (req, res) => {
+controllers.update = async (req, res) => {
     const { id } = req.params
     const { name } = req.body
     try {
@@ -52,7 +50,7 @@ const transaction_typeUpdate = async (req, res) => {
         return res.status(500).json({ msg })
     }
 }
-const transaction_typeDelete = async (req, res) => {
+controllers.delete = async (req, res) => {
     const { id } = req.params
     try {
         const resp = await transaction_type.update(
@@ -67,9 +65,5 @@ const transaction_typeDelete = async (req, res) => {
 }
 
 module.exports = {
-    transaction_typeGet,
-    transaction_typeGetById,
-    transaction_typeCreate,
-    transaction_typeUpdate,
-    transaction_typeDelete
+    controllers
 }

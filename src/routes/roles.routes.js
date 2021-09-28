@@ -1,18 +1,14 @@
 const { Router } = require('express');
 
-const routerRoles = Router()
+const router = Router()
 const {
-    rolesGet,
-    rolesGetById,
-    rolesCreate,
-    rolesUpdate,
-    rolesDelete
+    controllers
 } = require('../controllers/roles.controller')
 
-routerRoles.get('/', rolesGet)
-routerRoles.get('/:id', rolesGetById)
-routerRoles.post('/create', rolesCreate)
-routerRoles.put('/update/:id', rolesUpdate)
-routerRoles.put('/delete/:id', rolesDelete)
+router.get('/', controllers.get)
+router.get('/:id', controllers.getById)
+router.post('/create', controllers.create)
+router.put('/update/:id', controllers.update)
+router.put('/delete/:id', controllers.delete)
 
-module.exports = routerRoles
+module.exports = router

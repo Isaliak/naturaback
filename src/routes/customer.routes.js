@@ -3,14 +3,10 @@ const { check, param } = require('express-validator')
 const { validations } = require('../helpers/validations')
 const router = Router()
 const {
-    customerGet,
-    customerGetByCi,
-    customerCreate,
-    customerUpdate,
-    customerDelete
+    controllers
 } = require('../controllers/customer.controller')
-router.get('/', customerGet)
-router.get('/:id', customerGetByCi)
+router.get('/', controllers.get)
+router.get('/:id', controllers.getById)
 router.post('/create',
     [
         check('name', 'el nombre no puede estar vacio').notEmpty(),
@@ -21,7 +17,7 @@ router.post('/create',
         check('email', 'el email debe ser valido').isEmail(),
         validations,
     ],
-    customerCreate)
+    controllers.create)
 router.put('/update/:id',
     [
         param('id', 'debe colocar un id valido').notEmpty(),
@@ -33,7 +29,7 @@ router.put('/update/:id',
         check('email', 'el email debe ser valido').isEmail(),
         validations,
     ],
-    customerUpdate)
-router.put('/delete/:id', customerDelete)
+    controllers.update)
+router.put('/delete/:id', controllers.delete)
 
 module.exports = router

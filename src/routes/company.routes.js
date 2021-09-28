@@ -3,14 +3,10 @@ const { check, param } = require('express-validator')
 const { validations } = require('../helpers/validations')
 const routerCompany = Router()
 const {
-    companyGet,
-    companyGetById,
-    companyCreate,
-    companyUpdate,
-    companyDelete
+    controllers
 } = require('../controllers/company.controller')
-routerCompany.get('/', companyGet)
-routerCompany.get('/:id', companyGetById)
+routerCompany.get('/', controllers.get)
+routerCompany.get('/:id', controllers.getById)
 routerCompany.post('/create',
     [
         check('name', 'el nombre no puede estar vacio').notEmpty(),
@@ -20,7 +16,7 @@ routerCompany.post('/create',
         check('email', 'el email debe ser valido').isEmail(),
         validations,
     ],
-    companyCreate)
+    controllers.create)
 routerCompany.put('/update/:id',
     [
         param('id', 'el id no puede estar vacio').notEmpty(),
@@ -31,7 +27,7 @@ routerCompany.put('/update/:id',
         check('email', 'el email debe ser valido').isEmail(),
         validations,
     ],
-    companyUpdate)
-routerCompany.put('/delete/:id', companyDelete)
+    controllers.update)
+routerCompany.put('/delete/:id', controllers.delete)
 
 module.exports = routerCompany

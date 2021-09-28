@@ -1,73 +1,24 @@
-const { request, response } = require('express')
 const company = require('../models').company
+const { response } = require('../helpers/controller_response')
 
-
-let msg = {}
-const companyGet = async (req, res) => {
-    try {
-        const resp = await company.findAll({ where: { deleted: false } })
-        return (resp != null && resp.length != 0) ? res.status(200).json(resp) : res.status(201).json({ error: 'No hay registros para mostrar' })
-    } catch (error) {
-        msg = { 'error': error, 'msg': error.message }
-        console.log(msg);
-        return res.status(500).json({ msg })
-    }
+const controllers = {}
+controllers.get = async (req, res) => {
+    await response.get(company, 'company/controllers.get', req, res)
 }
-const companyGetById = async (req, res) => {
-    const { id } = req.params
-    try {
-        const resp = await company.findAll({ where: { deleted: false, id: id } })
-        return (resp != null && resp.length != 0) ? res.status(200).json(resp) : res.status(201).json({ error: 'fallo al recuperar el registro revise los datos' })
-    } catch (error) {
-        msg = { 'error': error, 'msg': error.message }
-        console.log(msg);
-        return res.status(500).json({ msg })
-    }
+controllers.getById = async (req, res) => {
+    await response.getById(company, 'company/controllers.getById', req, res)
 }
-const companyCreate = async (req = request, res = response) => {
+controllers.create = async (req, res) => {
     const { name, addres, phone, email, logo, web } = req.body
-    try {
-        const resp = await company.create(
-            { name, addres, phone, email, logo, web, createdAt: new Date(), updatedAt: new Date() }
-        )
-        return (resp != null && resp.length != 0) ? res.status(201).json(resp) : res.status(201).json({ error: 'fallo al realizar el registro revise los datos' })
-    } catch (error) {
-        msg = { 'error': error, 'msg': error.message }
-        console.log(msg);
-        return res.status(500).json({ msg })
-    }
+    await response.create(company, 'company/controllers.create', { name, addres, phone, email, logo, web }, req, res)
 }
-const companyUpdate = async (req, res) => {
-    const { id } = req.params
+controllers.update = async (req, res) => {
     const { name, addres, phone, email, logo, web, state } = req.body
-    try {
-        const resp = await company.update(
-            { name, addres, phone, email, logo, web, state, updatedAt: new Date() },
-            { where: { ci_number: id } })
-        return (resp != null && resp != 0) ? res.status(201).json(resp) : res.status(400).json({ error: 'fallo al actualizar el registro revise los datos' })
-    } catch (error) {
-        msg = { 'error': error, 'msg': error.message }
-        console.log(msg);
-        return res.status(500).json({ msg })
-    }
+    await response.update(company, 'company/controllers.update', { name, addres, phone, email, logo, web, state }, req, res)
 }
-const companyDelete = async (req, res) => {
-    const { id } = req.params
-    try {
-        const resp = await company.update(
-            { deleted: true, updatedAt: new Date() },
-            { where: { id: id } })
-        return (resp != null && resp != 0) ? res.status(201).json(resp) : res.status(400).json({ error: 'fallo al eliminar el registro revise los datos' })
-    } catch (error) {
-        msg = { 'error': error, 'msg': error.message }
-        console.log(msg);
-        return res.status(500).json({ msg })
-    }
+controllers.delete = async (req, res) => {
+    await response.delete(company, 'company/controllers.delete', req, res)
 }
 module.exports = {
-    companyGet,
-    companyGetById,
-    companyCreate,
-    companyUpdate,
-    companyDelete
+    controllers
 }
