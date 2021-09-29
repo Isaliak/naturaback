@@ -5,15 +5,11 @@ const { validations } = require('../helpers/validations')
 
 const routerUser = Router()
 const {
-    userGet,
-    userGetById,
-    userCreate,
-    userUpdate,
-    userDelete
+    controllers
 } = require('../controllers/user.controller')
 
-routerUser.get('/', userGet)
-routerUser.get('/:id', userGetById)
+routerUser.get('/', controllers.get)
+routerUser.get('/:id', controllers.getById)
 routerUser.post('/create',
     [
         check('username', 'el nombre de usuario no puede estar vacio').notEmpty(),
@@ -23,7 +19,7 @@ routerUser.post('/create',
         check('password', 'debe tener numeros, mayusculas y caracteres especiales').isStrongPassword(),
         validations,
     ],
-    userCreate
+    controllers.create
 )
 routerUser.put('/update/:id',
     [
@@ -35,8 +31,8 @@ routerUser.put('/update/:id',
         check('new_password', 'debe tener numeros, mayusculas y caracteres especiales').isStrongPassword(),
         validations,
     ],
-    userUpdate
+    controllers.update
 )
-routerUser.put('/delete/:id', userDelete)
+routerUser.put('/delete/:id', controllers.delete)
 
 module.exports = routerUser
